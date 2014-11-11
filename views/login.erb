@@ -1,0 +1,21 @@
+
+
+
+<div class="login-container">
+    <% if flash.error %>
+    <div class="flash-error">
+      <span><%= flash.error %></span>
+    </div>
+<% end %>
+    <form class="form-signin" role="form" action="/auth/login" method="post">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <div class="fancy-lock"><i class="fa fa-lock fa-6"></i></div>
+        <input name="user[username]" type="text" class="form-control" placeholder="Username" required="" autofocus="">
+        <input name="user[password]" type="password" class="form-control" placeholder="Password" required="">
+        <button class="" type="submit">Login</button>
+</form>
+
+</div>
+
+
+

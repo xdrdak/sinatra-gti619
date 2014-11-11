@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sinatra Warden Example</title>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+  </head>
+  <body>
+    <%= erb 'partials/header'.to_sym %>
+
+    <section class="main-section">
+            <%= yield %>
+    </section>
+ </body>
+</html>

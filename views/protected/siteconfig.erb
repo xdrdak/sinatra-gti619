@@ -1,0 +1,68 @@
+<% if flash.success %>
+    <div class="flash-success">
+      <span><%= flash.success %></span>
+    </div>
+<%end %>
+
+<% if flash.error %>
+    <div class="flash-error">
+      <span><%= flash.error %></span>
+    </div>
+<%end %>
+
+<h1>Security Configuration</h1>
+<form class="security-form" action="/protected/siteconfig" method="post">
+    <p>
+        <h3>Login security</h3>
+    </p>
+    <p>
+        <label for="max_hardlock_attempt">Maximum login attempts before hardlock :</label>
+        <input type="number" id="max_hardlock_attempt" name="securitysetting[max_hardlock_attempt]" value="<%= @security_settings.max_hardlock_attempt %>">
+    </p>
+     <p>
+        <label for="max_softlock_attempt">Maximum login attempts before softlock :</label>
+        <input type="number" id="max_softlock_attempt" name="securitysetting[max_softlock_attempt]" value="<%= @security_settings.max_softlock_attempt %>">
+    </p>
+    <p>
+        <label for="soft_timeout">Softlock timer (in minutes) :</label>
+        <input type="number" id="soft_timeout"  name="securitysetting[soft_timeout]"  value="<%= @security_settings.soft_timeout %>">
+    </p>
+    <hr>
+    <p>
+        <h3>Password security</h3>
+    </p>
+    <p>
+        <label for="pwd_min_len">Minimum Required Password length :</label>
+        <input type="number" id="pwd_min_len" name="securitysetting[pwd_min_len]" value="<%= @security_settings.pwd_min_len %>">
+    </p>
+    <p>
+        <label for="pwd_uppers">Minimum  Required Uppercase Characters :</label>
+        <input type="number" id="pwd_uppers" name="securitysetting[pwd_uppers]" value="<%= @security_settings.pwd_uppers %>">
+    </p>
+    <p>
+        <label for="pwd_lowers">Minimum Required Lowercase Characters :</label>
+        <input type="number" id="pwd_lowers" name="securitysetting[pwd_lowers]" value="<%= @security_settings.pwd_lowers %>">
+    </p>
+    <p>
+        <label for="pwd_specials">Minimum Required Special Characters :</label>
+        <input type="number" id="pwd_specials" name="securitysetting[pwd_specials]" value="<%= @security_settings.pwd_specials %>">
+    </p>
+    <p>
+        <label for="pwd_number">Minimum Required Numbers :</label>
+        <input type="number" id="pwd_number" name="securitysetting[pwd_number]" value="<%= @security_settings.pwd_number %>">
+    </p>
+    <p>
+        <label for="old_pwd_keep">Old password history length (0 means never keep) :</label>
+        <input type="number" id="old_pwd_keep" name="securitysetting[old_pwd_keep]" value="<%= @security_settings.old_pwd_keep %>">
+
+    </p>
+    <hr>
+    <p>
+        <h3>Password expiration</h3>
+    </p>
+    <p>
+        <label for="text_field">How many days before asking for a new password (0 means never ask) ?</label>
+        <input type="number" id="text_field">
+    </p>
+     <p><input class="button" type="submit" value="Submit"></p>
+</form>

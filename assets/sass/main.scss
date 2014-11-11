@@ -1,0 +1,78 @@
+/*reset all the things!*/
+@import "_normalize";
+
+/*Import all framework stuffs*/
+@import "bourbon/bourbon";
+@import "base/grid-settings";
+@import "neat/neat";
+@import "base/base";
+
+/*Import our custom stuff*/
+@import "_header";
+
+@import "_flash";
+@import "_intro-text";
+
+html{
+    background: url(../img/bg.svg) no-repeat center center fixed;
+    background-size: 100%;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+
+}
+body{
+    background-color: transparent;
+      margin-bottom: 20px;
+}
+section{
+    @include outer-container;
+    aside { @include span-columns(3); }
+    article { @include span-columns(9); }
+    .center-content{
+        @include span-columns(6);
+        @include shift(3);
+        text-align: center;
+    }
+    .login-container{
+        @include span-columns(6);
+        @include shift(3);
+    }
+}
+
+.form-signin {
+    .form-signin-heading{
+        text-align: center;
+         line-height: 2.5em;
+    }
+    input{
+        margin: 30px 0;
+    }
+    button{
+        float: right;
+    }
+
+}
+
+.fancy-lock{
+    text-align: center;
+    font-size: 6em;
+}
+
+.main-section{
+    @include pad();
+    margin-top: 20px;
+    background-color: #fff;
+    box-shadow: 0px 0px 8px 2px rgba(0,0,0,0.1);
+}
+
+.security-form{
+    input[type="text"], input[type="number"]{
+        width: 20%;
+    }
+}
+
+
+

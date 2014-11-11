@@ -1,0 +1,49 @@
+body
+{
+  font-family: "Open Sans", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+h1, h2, h3, h4, h5, h6 
+{
+  font-family: "Open Sans", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* 404  */
+
+.cu-404-box
+{
+  padding-top: 48px;
+}
+
+/* login form */
+.cu-login-form
+{
+  width: 300px;
+  margin: 60px auto 60px;
+  padding: 10px;
+}
+
+.cu-logo-box
+{
+  background-color: #ebebeb;
+  height: 60px;
+  padding-top: 5px;
+}
+
+.cu-text-box
+{
+  background-color: #f2f2f2;
+  height: 60px;
+  padding-top: 5px;
+}
+
+.alert-box
+{
+  margin-top: 24px;
+}
+
+

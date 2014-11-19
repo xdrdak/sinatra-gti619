@@ -43,6 +43,8 @@ module SST
             user.password =  params['newpwd']
             old_pw_history.save
             user.save
+            log = Log.create(related_user: user.username, message: "Password has been changed ")
+            log.save
             flash[:success] = "New password has been set!"
           end
 
@@ -58,6 +60,14 @@ module SST
 
     end
 
+    get '/protected/logs' do
+      authorize(Permissions::ADMIN)
+      @logs = Log.all()
+      puts @logs.count
+      erb "protected/logs".to_sym
+
+    end
+
     get '/protected/siteconfig' do
       authorize(Permissions::ADMIN)
       @security_settings =SecuritySetting.first
@@ -69,7 +79,10 @@ module SST
       authorize(Permissions::ADMIN)
       @security_settings =SecuritySetting.first
       if params['securitysetting'] and  @security_settings.update(params['securitysetting'])
+        user = env['warden'].user
         flash[:success] = "Security settings saved!"
+        log = Log.create(related_user: user.username, message: "Settings have been changed")
+        log.save
         redirect '/protected/siteconfig'
       else
          flash[:error] = "There are errors in the settings!"
@@ -97,6 +110,9 @@ module SST
       end
 
       if !valid
+        log = Log.create(related_user: user.username, message: "Tried to access something he was not supposed to")
+        log.save
+
         error 403
       end
     end

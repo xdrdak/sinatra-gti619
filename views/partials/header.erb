@@ -12,7 +12,7 @@
         <ul id="navigation-menu">
           <li class="nav-link"><a href="/">About</a></li>
           <% if env['warden'].user.is_admin? %>
-            <li class="nav-link"><a href="/protected/siteconfig"><i class="fa fa-list-alt"></i> Administrative Admin</a></li>
+            <li class="nav-link"><a href="/protected/siteconfig"><i class="fa fa-list-alt"></i> Amazing Admin</a></li>
           <% end %>
           <% if env['warden'].user.is_rectangle? %>
             <li class="nav-link"><a href="/protected/rectangle"><i class="fa fa-square"></i> Rambunctious Rectangle </a></li>
@@ -22,6 +22,9 @@
           <% end %>
           <li class="nav-link more"><a href="javascript:void(0)"><i class="fa fa-user"></i> <%= env['warden'].user.username %></a>
           <ul class="submenu">
+            <% if env['warden'].user.is_admin? %>
+            <li><a href="/protected/logs"><i class="fa fa-book"></i> View Logs</a></li>
+            <% end %>
             <li><a href="/protected/pwupdate"><i class="fa fa-cog"></i> Change Password</a></li>
             <li><a href="/auth/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
           </ul>

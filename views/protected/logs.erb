@@ -1,0 +1,20 @@
+
+<h1>System Log</h1>
+<table>
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Message</th>
+            <th>Timestamp</th>
+        </tr>
+    </thead>
+    <tbody>
+        <%  @logs.each do |l| %>
+                <tr>
+                    <td><%= l.related_user %></td>
+                    <td><%= l.message %></td>
+                    <td><%= l.timestamp %></td>
+                </tr>
+        <% end %>
+    </tbody>
+</table>

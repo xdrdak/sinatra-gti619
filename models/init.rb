@@ -16,6 +16,7 @@ DataMapper.setup :default, url
 require_relative "user"
 require_relative "security_setting"
 require_relative "oldpw"
+require_relative "log"
 
 # finalize
 DataMapper.finalize

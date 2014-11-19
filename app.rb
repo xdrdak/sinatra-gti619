@@ -62,10 +62,14 @@ module SST
         elsif user.is_on_cooldown?
           fail!("This account has been temporarily suspended. Please try again in " + user.softlock_timeleft.to_s + " minutes")
         elsif user.authenticate(params['user']['password'])
+            log = Log.create(related_user: user.username, message: "User has logged in")
+            log.save
             flash.success = "Logged in"
             user.reset_as_active
             success!(user)
         else
+          log = Log.create(related_user: user.username, message: "User failed to login")
+          log.save
           user.add_login_tries
           puts user.login_tries
           fail!("Account does not exist or the password is invalid")

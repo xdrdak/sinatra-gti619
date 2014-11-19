@@ -51,7 +51,7 @@ class User
     if self.last_login_attempt
       ((DateTime.now - self.last_login_attempt) * 24 *60).to_i
     else
-      100000000
+      -1
     end
 
   end

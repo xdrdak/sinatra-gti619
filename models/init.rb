@@ -1,5 +1,6 @@
 # database requires
 require "data_mapper"
+require 'dm-aggregates'
 require "bcrypt"
 
 # database url
@@ -14,7 +15,7 @@ DataMapper.setup :default, url
 # require models
 require_relative "user"
 require_relative "security_setting"
-#require_relative "profile"
+require_relative "oldpw"
 
 # finalize
 DataMapper.finalize

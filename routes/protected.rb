@@ -27,14 +27,25 @@ module SST
       authorize(Permissions::ANY)
       user = env['warden'].user
 
-      puts params['oldpwd']
-      @security_settings =SecuritySetting.first
+      @security_settings = SecuritySetting.first
 
       if params['oldpwd'] and params['newpwd'] and params['newpwdconf']
-        if user.authenticate(params['oldpwd']) and params['newpwd'] == params['newpwdconf'] and @security_settings.validate_pwd(params['newpwd'])
-          flash[:success] = "New password has been set!"
-          user.password = params['newpwd']
-          user.save
+
+        if params['oldpwd'] == params['newpwd']
+          flash[:error] = "You cannot use a new password that is the same as the old one!"
+
+        elsif user.authenticate(params['oldpwd']) and params['newpwd'] == params['newpwdconf'] and @security_settings.validate_pwd(params['newpwd'])
+          old_pw_history = Oldpw.new(user_id: user.id, password:  params['newpwd'])
+
+          if old_pw_history.already_exists?(user.id, params['newpwd'], @security_settings.old_pwd_keep)
+             flash[:error] = "You've already used this new password before. Please choose another one."
+          else
+            user.password =  params['newpwd']
+            old_pw_history.save
+            user.save
+            flash[:success] = "New password has been set!"
+          end
+
         else
            flash[:error] = "Passwords are invalid! Make sure you enter your passwords correctly"
         end
@@ -61,7 +72,7 @@ module SST
         flash[:success] = "Security settings saved!"
         redirect '/protected/siteconfig'
       else
-         flash[:error] = "There are are errors in the settings!"
+         flash[:error] = "There are errors in the settings!"
          erb "protected/siteconfig".to_sym
       end
 

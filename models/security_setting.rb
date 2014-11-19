@@ -12,7 +12,7 @@ class SecuritySetting
   property :pwd_uppers, Integer,  :required => true, :default => 1
   property :pwd_number, Integer,  :required => true, :default => 1
   property :pwd_specials, Integer,  :required => true, :default => 1
-  property :old_pwd_keep, Integer,  :required => true, :default => 0, :format => /^[0-9]$/
+  property :old_pwd_keep, Integer,  :required => true, :default => 0
 
   def validate_pwd(pwd)
     upper_count = (pwd.scan /\p{Upper}/).length

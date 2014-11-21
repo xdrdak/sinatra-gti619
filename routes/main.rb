@@ -3,6 +3,14 @@
 #
 module SST
   class SinatraWarden < Sinatra::Base
+    after do
+      puts 'before'
+      if env['warden'].authenticated?
+        if env['warden'].user.status == Status::NEEDRESET && request.path_info != "/protected/reset"
+          redirect '/protected/reset'
+        end
+      end
+    end
     # site index
     get "/" do
       erb :index

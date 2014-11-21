@@ -17,6 +17,7 @@ class User
   property :salt          ,String         ,length: 0..100
   property :created        ,DateTime
   property :updated        ,DateTime
+  property :password_update_date, DateTime
   property :last_login_attempt        ,DateTime
   property :status         ,Integer        ,default: 0
   property :login_tries         ,Integer        ,default: 0
@@ -25,6 +26,11 @@ class User
   def generate_token
     # generate token
     self.salt = BCrypt::Engine.generate_salt if self.salt.nil?
+  end
+
+  def next_password_update_date(amount)
+    self.password_update_date = DateTime.now +  amount
+    self.save
   end
 
   def authenticate(pass)

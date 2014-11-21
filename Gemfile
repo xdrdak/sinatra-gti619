@@ -8,9 +8,6 @@ gem "thin"
 
 gem "shotgun"
 
-# gems template
-gem "slim"
-
 # utilities
 gem "rack-flash3" , '1.0.1', require: 'rack/flash'
 gem "sinatra-contrib"
@@ -26,3 +23,7 @@ gem "warden","1.2.1"
 gem 'pry'
 gem 'pry-remote'
 gem 'pry-nav'
+
+gem 'encrypted_cookie'
+
+gem 'pony'

@@ -32,7 +32,6 @@ module SST
         # accessing unauthenticated user to protected path
         post '/auth/unauthenticated' do
           session[:return_to] = env['warden.options'][:attempted_path]
-          puts env['warden.options'][:attempted_path]
           flash[:error] = env['warden'].message  || 'You must to login to continue'
           redirect '/auth/login'
         end

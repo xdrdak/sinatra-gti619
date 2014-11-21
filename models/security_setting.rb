@@ -4,15 +4,16 @@ class SecuritySetting
 
   # properties
   property :id, Serial
-  property :max_softlock_attempt, Integer,  :required => true , :default => 3
-  property :max_hardlock_attempt, Integer,  :required => true,  :default => 6
-  property :soft_timeout, Integer,  :required => true, :default => 60
-  property :pwd_min_len, Integer,  :required => true, :default => 6
-  property :pwd_lowers, Integer,  :required => true, :default => 1
-  property :pwd_uppers, Integer,  :required => true, :default => 1
-  property :pwd_number, Integer,  :required => true, :default => 1
-  property :pwd_specials, Integer,  :required => true, :default => 1
-  property :old_pwd_keep, Integer,  :required => true, :default => 0
+  property :max_softlock_attempt, Integer,  :required => true , :default => 3, :format => /^([0-9]|[1-9][0-9])$/
+  property :max_hardlock_attempt, Integer,  :required => true,  :default => 6, :format => /^([0-9]|[1-9][0-9])$/
+  property :soft_timeout, Integer,  :required => true, :default => 60, :format => /^([0-9]|[1-9][0-9]|[1-9][0-9][0-9])$/
+  property :pwd_min_len, Integer,  :required => true, :default => 6, :format =>/^([0-9]|[1-9][0-9])$/
+  property :pwd_lowers, Integer,  :required => true, :default => 1, :format => /^([0-9]|[1-9][0-9])$/
+  property :pwd_uppers, Integer,  :required => true, :default => 1, :format => /^([0-9]|[1-9][0-9])$/
+  property :pwd_number, Integer,  :required => true, :default => 1, :format => /^([0-9]|[1-9][0-9])$/
+  property :pwd_specials, Integer,  :required => true, :default => 1, :format => /^([0-9]|[1-9][0-9])$/
+  property :old_pwd_keep, Integer,  :required => true, :default => 0, :format => /^([0-9]|[1-9][0-9])$/
+  property :days_before_pw_expire         ,Integer,  :required => true, :default => 14, :format => /^([0-9]|[1-9][0-9])$/
 
   def validate_pwd(pwd)
     upper_count = (pwd.scan /\p{Upper}/).length

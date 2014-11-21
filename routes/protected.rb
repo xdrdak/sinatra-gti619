@@ -1,10 +1,45 @@
 module SST
   class SinatraWarden < Sinatra::Base
-    #require './helpers/protected_helper'
 
     get '/protected' do
       env['warden'].authenticate!
       erb :protected
+    end
+
+    get '/protected/reset' do
+      user = authorize(Permissions::ANY)
+      if user.status != Status::NEEDRESET
+        redirect '/'
+      end
+
+      @title = "Password expired - Set new Password" if Status::NEEDRESET == user.status
+      @security_settings = SecuritySetting.first
+      erb "/protected/pw_reset".to_sym
+    end
+
+    post '/protected/reset' do
+      user = authorize(Permissions::ANY)
+
+      if user.status != Status::NEEDRESET
+        redirect '/'
+      end
+      @security_settings = SecuritySetting.first
+      if params['newpwd'] == params['newpwdconf'] and @security_settings.validate_pwd(params['newpwd'])
+          old_pw_history = Oldpw.new(user_id: user.id, password:  params['newpwd'])
+
+          if old_pw_history.already_exists?(user.id, params['newpwd'], @security_settings.old_pwd_keep)
+             flash[:error] = "You've already used this new password before. Please choose another one."
+          else
+            set_new_pw(user, old_pw_history, params['newpwd'], @security_settings.days_before_pw_expire)
+            flash[:success] = "New password has been set!"
+            redirect '/'
+          end
+
+        else
+           flash[:error] = "Passwords are invalid! Make sure you enter your passwords correctly"
+      end
+
+      redirect '/protected/reset'
     end
 
     get '/protected/circle' do
@@ -40,11 +75,7 @@ module SST
           if old_pw_history.already_exists?(user.id, params['newpwd'], @security_settings.old_pwd_keep)
              flash[:error] = "You've already used this new password before. Please choose another one."
           else
-            user.password =  params['newpwd']
-            old_pw_history.save
-            user.save
-            log = Log.create(related_user: user.username, message: "Password has been changed ")
-            log.save
+            set_new_pw(user, old_pw_history, params['newpwd'], @security_settings.days_before_pw_expire)
             flash[:success] = "New password has been set!"
           end
 
@@ -63,7 +94,6 @@ module SST
     get '/protected/logs' do
       authorize(Permissions::ADMIN)
       @logs = Log.all()
-      puts @logs.count
       erb "protected/logs".to_sym
 
     end
@@ -76,10 +106,9 @@ module SST
 
 
      post '/protected/siteconfig' do
-      authorize(Permissions::ADMIN)
+      user = authorize(Permissions::ADMIN)
       @security_settings =SecuritySetting.first
       if params['securitysetting'] and  @security_settings.update(params['securitysetting'])
-        user = env['warden'].user
         flash[:success] = "Security settings saved!"
         log = Log.create(related_user: user.username, message: "Settings have been changed")
         log.save
@@ -91,7 +120,7 @@ module SST
 
     end
 
-
+private
     #Authenticate and authorize : All in one!
     def authorize(permission)
       #Use warden for authentication. If it fails, bounce back to login
@@ -115,6 +144,18 @@ module SST
 
         error 403
       end
+
+      user
+    end
+
+    def set_new_pw(user, old_pw_history, pwd, days_before_pw_expire)
+        user.password =  pwd
+        user.status = Status::ACTIVE
+        old_pw_history.save
+        user.next_password_update_date(days_before_pw_expire)
+        user.save
+        log = Log.create(related_user: user.username, message: "Password has been changed ")
+        log.save
     end
 
   end

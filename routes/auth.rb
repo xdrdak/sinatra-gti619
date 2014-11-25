@@ -36,6 +36,11 @@ module SST
           redirect '/auth/login'
         end
 
+        get '/auth/forgot' do
+
+            erb '/forgot_pwd'.to_sym
+        end
+
 
         # logout
         get '/auth/logout' do

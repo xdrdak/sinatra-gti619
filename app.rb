@@ -2,6 +2,7 @@
 require "sinatra"
 require "warden"
 require "rack-flash"
+require 'rack/ssl'
 
 
 
@@ -12,10 +13,14 @@ require_relative "status"
 require_relative "models/init"
 
 
+
+
+
 # main class
 module SST
   class SinatraWarden < Sinatra::Base
     # enabling sessions and configuring flash
+    use Rack::SSL
     use Rack::Session::Cookie, :expire_after => 86400, secret: "1d8cf82056f6c031aff000fa7f0068c852b9cb669066591981b9df875555d6be"
     use Rack::Flash, accessorize: [:error, :success]
 
@@ -87,7 +92,9 @@ module SST
 
     end
 
+
   end
+
 end
 # require routes
 require_relative "routes/init"

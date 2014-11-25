@@ -17,6 +17,21 @@ module SST
       erb "/protected/pw_reset".to_sym
     end
 
+    get '/protected/users' do
+      user = authorize(Permissions::ADMIN)
+
+    end
+
+    get '/protected/users/:id' do |n|
+      user = authorize(Permissions::ADMIN)
+#1.is_a? Integer
+      s_user = User.get(n)
+
+
+    end
+
+
+
     post '/protected/reset' do
       user = authorize(Permissions::ANY)
 

@@ -4,7 +4,8 @@ source "http://gems.github.com"
 
 # gems
 gem "sinatra", github:"sinatra/sinatra"
-gem "thin"
+gem 'rack-ssl'
+#gem "thin"
 
 gem "shotgun"
 

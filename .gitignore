@@ -1,3 +1,6 @@
 .bundle/*
 db/*
 !db/db.txt
+server.crt
+server.csr
+server.key

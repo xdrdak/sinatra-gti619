@@ -9,18 +9,19 @@ class User
 
   # properties
   property :id             ,Serial
-  property :username       ,String         ,length: 0..50
+  property :username       ,String         ,length: 0..50, :unique => true
   property :email           ,String         ,length: 0..200
   property :name           ,String         ,length: 0..200
   property :permission        ,Integer         ,default: 0
   property :password       ,BCryptHash
   property :salt          ,String         ,length: 0..100
   property :created        ,DateTime
-  property :updated        ,DateTime
   property :password_update_date, DateTime
   property :last_login_attempt        ,DateTime
   property :status         ,Integer        ,default: 0
   property :login_tries         ,Integer        ,default: 0
+  property :crypt_version, String, default: "bcrypt3.1.9"
+  property :reset_token, Text
 
   # methods
   def generate_token
@@ -28,13 +29,19 @@ class User
     self.salt = BCrypt::Engine.generate_salt if self.salt.nil?
   end
 
-  def next_password_update_date(amount)
+  def next_password_update_date(amount, save = true)
     self.password_update_date = DateTime.now +  amount
-    self.save
+    if save
+      self.save
+    end
   end
 
   def authenticate(pass)
     self.password == pass
+  end
+
+  def generate_reset_token
+    self.reset_token = SecureRandom.hex + "_" + (DateTime.now + 1).to_s
   end
 
   def is_circle?
@@ -72,11 +79,14 @@ class User
 
   end
 
-  def reset_as_active
+  def reset_as_active(save = true)
     self.login_tries = 0
     self.last_login_attempt  = DateTime.now
     self.status = Status::ACTIVE
-    self.save
+    if save
+      self.save
+    end
+
   end
 
   def add_login_tries

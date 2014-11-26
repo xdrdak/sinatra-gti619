@@ -1,6 +1,9 @@
-<form class="form-signin" role="form" action="" method="post">
-        <h2 class="form-signin-heading">Enter email</h2>
-        <div class="fancy-lock"><i class="fa fa-lock fa-6"></i></div>
-        <input name="user[username]" type="email" class="form-control" placeholder="email" required="" autofocus="">
-        <button class="" type="submit">Continue</button>
-</form>
+
+<div class="login-container">
+    <form class="form-signin" role="form" action="/auth/forgot" method="post">
+            <h2 class="form-signin-heading">Enter your account name</h2>
+            <p>An email with the instructions for resetting your password will be sent.</p>
+            <input name="user" type="text" class="form-control" placeholder="username" required="" autofocus="">
+            <button class="" type="submit">Continue</button>
+    </form>
+</div>

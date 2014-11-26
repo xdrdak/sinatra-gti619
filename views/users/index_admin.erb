@@ -1,0 +1,17 @@
+<h1>User List</h1>
+<table>
+    <thead>
+        <tr>
+            <th>User</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <%  @users.each do |u| %>
+                <tr>
+                    <td><%= u.username%></td>
+                    <td><a href="/protected/users/<%= u.id%>/reset" class="sign-up default">Reset password</a></td>
+                </tr>
+        <% end %>
+    </tbody>
+</table>

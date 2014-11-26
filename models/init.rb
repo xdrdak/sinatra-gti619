@@ -27,18 +27,21 @@ if User.count == 0
   @user = User.create(username: "admin")
   @user.password = "admin"
   @user.permission = Permissions::ADMIN
+  @user.email = "x.drdak@gmail.com"
   @user.status = Status::ACTIVE
   @user.save
 
   @user = User.create(username: "circle")
   @user.password = "circle"
   @user.permission = Permissions::CIRCLE
+   @user.email = "x.drdak@gmail.com"
   @user.status = Status::ACTIVE
   @user.save
 
   @user = User.create(username: "rectangle")
   @user.password = "rectangle"
   @user.permission = Permissions::RECT
+  @user.email = "x.drdak@gmail.com"
   @user.status = Status::ACTIVE
   @user.save
 end

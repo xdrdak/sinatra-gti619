@@ -8,29 +8,59 @@ module SST
 
     get '/protected/reset' do
       user = authorize(Permissions::ANY)
-      if user.status != Status::NEEDRESET
+      if user.status != Status::NEEDRESET && user.status != Status::NEEDRESETBYMAIL
         redirect '/'
       end
 
-      @title = "Password expired - Set new Password" if Status::NEEDRESET == user.status
+      @title =  if Status::NEEDRESET == user.status
+        "Password expired - Set new Password"
+      else
+        "Password reset - Set new Password"
+      end
       @security_settings = SecuritySetting.first
       erb "/protected/pw_reset".to_sym
     end
 
     get '/protected/users' do
-      user = authorize(Permissions::ADMIN)
-
+      authorize(Permissions::ADMIN)
+      @users = User.all
+      erb '/users/index_admin'.to_sym
     end
 
-    get '/protected/users/:id' do |n|
-      user = authorize(Permissions::ADMIN)
-#1.is_a? Integer
-      s_user = User.get(n)
-
-
+    get '/protected/users/:id/reset' do |n|
+      authorize(Permissions::ADMIN)
+      @s_user = User.get(n)
+      if @s_user
+       erb '/users/reset'.to_sym
+      else
+        redirect '/'
+      end
     end
 
+    post '/protected/users/:id/reset' do |n|
+      user = authorize(Permissions::ADMIN)
 
+      if params['password'] && user.password ==  params['password']
+        @s_user = User.get(n)
+        if @s_user
+          @password = SecureRandom.hex(4)
+          @s_user.password = @password
+          @s_user.reset_as_active(false)
+          @s_user.next_password_update_date(1,false)
+          @s_user.save
+          mail_to(@s_user.email, "Account Reactivated",
+            "<p>Your account has been reactivated. Please log in with the following temporary password : #{@password}</p>
+            <p><strong>This password is only valid for 1 day, you must change it as you log in!</strong></p>
+            <p><a href='#{request.base_url}/auth/login''>Click here to log in</a><p>")
+          erb '/users/reset_confirm'.to_sym
+        else
+          redirect '/protected/users'
+        end
+      else
+        redirect '/'
+      end
+
+    end
 
     post '/protected/reset' do
       user = authorize(Permissions::ANY)

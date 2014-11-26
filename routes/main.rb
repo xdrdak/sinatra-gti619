@@ -5,7 +5,7 @@ module SST
   class SinatraWarden < Sinatra::Base
     after do
       if env['warden'].authenticated?
-        if env['warden'].user.status == Status::NEEDRESET && request.path_info != "/protected/reset"
+        if (env['warden'].user.status == Status::NEEDRESET || env['warden'].user.status == Status::NEEDRESETBYMAIL) && request.path_info != "/protected/reset"
           redirect '/protected/reset'
         end
       end

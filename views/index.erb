@@ -6,6 +6,15 @@
     </div>
 <%end %>
 
+
+
+<% if flash.error %>
+    <div class="flash-error">
+      <span><%= flash.error %></span>
+    </div>
+<%end %>
+
+
 <div class="intro-text">
   <h2>Fancy Lab5</h2>
   <h4>This is the final project for GTI619, so it better be pretty fancy.</h4>

@@ -13,6 +13,7 @@
           <li class="nav-link"><a href="/">About</a></li>
           <% if env['warden'].user.is_admin? %>
             <li class="nav-link"><a href="/protected/siteconfig"><i class="fa fa-list-alt"></i> Amazing Admin</a></li>
+             <li class="nav-link"><a href="/protected/users"><i class="fa fa-users"></i> Useable Users</a></li>
           <% end %>
           <% if env['warden'].user.is_rectangle? %>
             <li class="nav-link"><a href="/protected/rectangle"><i class="fa fa-square"></i> Rambunctious Rectangle </a></li>

@@ -1,0 +1,42 @@
+<% if flash.error %>
+    <div class="flash-error">
+      <span><%= flash.error %></span>
+    </div>
+<% end %>
+<% if flash.success %>
+    <div class="flash-success">
+      <span><%= flash.success %></span>
+    </div>
+<% end %>
+<h1><%= @title %></h1>
+<form action="/protected/reset" method="post">
+    <p>
+        <em>Please note : </em> New passwords need to have  the following requirements
+        <ul style="list-style-type: circle; padding-left: 20px;">
+            <% if @security_settings.pwd_min_len > 0 %>
+                <li>At least <%= @security_settings.pwd_min_len %> caracters</li>
+            <% end %>
+            <% if @security_settings.pwd_lowers > 0 %>
+                <li>At least <%= @security_settings.pwd_lowers %> lower case caracters</li>
+            <% end %>
+            <% if @security_settings.pwd_uppers > 0 %>
+                <li>At least <%= @security_settings.pwd_uppers %> upper case caracters</li>
+            <% end %>
+              <% if @security_settings.pwd_number > 0 %>
+                <li>At least <%= @security_settings.pwd_number %> numbers</li>
+            <% end %>
+              <% if @security_settings.pwd_specials > 0 %>
+                <li>At least <%= @security_settings.pwd_specials %> special caracters</li>
+            <% end %>
+        </ul>
+    </p>
+    <p>
+        <label for="newpwd">New password :</label>
+        <input type="password" id="newpwd"  name="newpwd">
+    </p>
+    <p>
+        <label for="newpwdconf">Confirm new password :</label>
+        <input type="password" id="newpwdconf"  name="newpwdconf">
+    </p>
+    <p><input class="button" type="submit" value="Submit"></p>
+</form>

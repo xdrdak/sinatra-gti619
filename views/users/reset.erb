@@ -1,0 +1,19 @@
+
+<div class="login-container">
+    <% if flash.error %>
+    <div class="flash-error">
+      <span><%= flash.error %></span>
+    </div>
+<% end %>
+    <form class="form-signin" role="form" action="/protected/users/<%= @s_user.id%>/reset" method="post">
+        <h3 class="">Reset password for "<%= @s_user.username%>" </h3>
+        <br>
+        <p>Please enter your password to continue. A temporary password will automatically be set for the user.</p>
+        <input name="password" type="password" class="form-control" placeholder="Password" required="">
+        <button class="" type="submit">Reset</button>
+    </form>
+
+</div>
+
+
+

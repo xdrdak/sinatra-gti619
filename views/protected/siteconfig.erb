@@ -7,8 +7,16 @@
 <% if flash.error %>
     <div class="flash-error">
       <span><%= flash.error %></span>
+      <ul style="list-style-type">
+          <% @security_settings.errors.each do |e| %>
+        <li><%= e[0] %></li>
+        <% end %>
+
+      </ul>
+
     </div>
-<%end %>
+
+<% end %>
 
 <h1>Security Configuration</h1>
 <form class="security-form" action="/protected/siteconfig" method="post">

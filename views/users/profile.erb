@@ -1,0 +1,19 @@
+<% if flash.success %>
+    <div class="flash-success">
+      <span><%= flash.success %></span>
+    </div>
+<%end %>
+
+<h1>Your profile</h1>
+<form class="security-form" action="/protected/profile" method="post">
+    </p>
+    <p>
+        <label for="email">Email :</label>
+        <input type="text" id="email" name="user[email]" value="<%= @user.email %>">
+    </p>
+    <p>
+        <label for="text">Name :</label>
+        <input type="text" id="text" name="user[name]" value="<%= @user.name %>">
+    </p>
+     <p><input class="button" type="submit" value="Update profile"></p>
+</form>

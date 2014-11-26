@@ -48,7 +48,7 @@ module SST
             time = DateTime.parse(token_array[1])
 
             time_expired = (DateTime.now > time)
-            #http://127.0.0.1:9393/auth/reset/c5b4f17c8c1f0e9265008851b7d5d92f_2014-11-26T20:32:36-05:00
+
             puts time_expired
             if time_expired
               flash[:error] = "Password reset link is expired!"

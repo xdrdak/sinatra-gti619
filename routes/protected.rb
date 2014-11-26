@@ -6,21 +6,6 @@ module SST
       erb :protected
     end
 
-    get '/protected/reset' do
-      user = authorize(Permissions::ANY)
-      if user.status != Status::NEEDRESET && user.status != Status::NEEDRESETBYMAIL
-        redirect '/'
-      end
-
-      @title =  if Status::NEEDRESET == user.status
-        "Password expired - Set new Password"
-      else
-        "Password reset - Set new Password"
-      end
-      @security_settings = SecuritySetting.first
-      erb "/protected/pw_reset".to_sym
-    end
-
     get '/protected/users' do
       authorize(Permissions::ADMIN)
       @users = User.all
@@ -60,6 +45,21 @@ module SST
         redirect '/'
       end
 
+    end
+
+    get '/protected/reset' do
+      user = authorize(Permissions::ANY)
+      if user.status != Status::NEEDRESET && user.status != Status::NEEDRESETBYMAIL
+        redirect '/'
+      end
+
+      @title =  if Status::NEEDRESET == user.status
+        "Password expired - Set new Password"
+      else
+        "Password reset - Set new Password"
+      end
+      @security_settings = SecuritySetting.first
+      erb "/protected/pw_reset".to_sym
     end
 
     post '/protected/reset' do
@@ -140,7 +140,26 @@ module SST
       authorize(Permissions::ADMIN)
       @logs = Log.all()
       erb "protected/logs".to_sym
+    end
 
+    get '/protected/profile' do
+      @user = authorize(Permissions::ANY)
+      erb "users/profile".to_sym
+    end
+
+    post '/protected/profile' do
+      user = authorize(Permissions::ANY)
+      if params['user']['email']
+        user.email = params['user']['email']
+      end
+
+      if  params['user']['name']
+        user.name = params['user']['name']
+      end
+
+      user.save
+      flash[:success] = "Profile updated!"
+      redirect '/protected/profile'
     end
 
     get '/protected/siteconfig' do
@@ -153,12 +172,24 @@ module SST
      post '/protected/siteconfig' do
       user = authorize(Permissions::ADMIN)
       @security_settings =SecuritySetting.first
-      if params['securitysetting'] and  @security_settings.update(params['securitysetting'])
+       flash[:error] = nil
+
+      min_max_probl = false
+      if params['securitysetting']
+        if params['securitysetting']['max_softlock_attempt'].to_i > params['securitysetting']['max_hardlock_attempt'].to_i
+            min_max_probl = true
+        end
+      end
+
+      if params['securitysetting'] and  @security_settings.update(params['securitysetting']) and !min_max_probl
         flash[:success] = "Security settings saved!"
         log = Log.create(related_user: user.username, message: "Settings have been changed")
         log.save
         redirect '/protected/siteconfig'
       else
+         if min_max_probl
+          @security_settings.errors.add(:min_max_probl, "Minimum hardlock attempt must be smaller than the maximum hardlock attempt")
+         end
          flash[:error] = "There are errors in the settings!"
          erb "protected/siteconfig".to_sym
       end

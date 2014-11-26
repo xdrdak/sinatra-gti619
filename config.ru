@@ -1,8 +1,8 @@
 root = ::File.dirname(__FILE__)
 require ::File.join(root,'app')
 require "webrick"
-#require 'webrick/https'
-#require 'openssl'
+require 'webrick/https'
+require 'openssl'
 
 CERT_PATH = './'
 
@@ -17,11 +17,11 @@ webrick_options = {
         :SSLCertName        => [ [ "CN",WEBrick::Utils::getservername ] ]
 }
 
-#server = ::Rack::Handler::WEBrick
-#trap(:INT) do
- #   server.shutdown
-#end
-#server.run(SST::SinatraWarden.new, webrick_options)
+server = ::Rack::Handler::WEBrick
+trap(:INT) do
+    server.shutdown
+end
+server.run(SST::SinatraWarden.new, webrick_options)
 
 run SST::SinatraWarden.new
 
